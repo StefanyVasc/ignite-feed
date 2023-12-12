@@ -10,7 +10,7 @@
 
   --green-300: #00b37e;
   --green-500: #00875f;
-  --red-900: #f75a68;
+  --red-500: #f75a68;
 }
 
 :focus {
@@ -37,4 +37,9 @@ button {
   font-family: "Roboto", sans-serif;
   font-weight: 400;
   font-size: 1rem;
+}
+
+button {
+  background: transparent;
+  border: 0;
 }
