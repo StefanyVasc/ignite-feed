@@ -1,20 +1,18 @@
+import { Avatar } from "./Avatar"
 import { Comment } from "./Comment"
 import styles from "./Post.module.css"
+
 export function Post() {
   return (
     <article className={styles.post}>
       <header>
         <div className={styles.author}>
-          <img
-            className={styles.avatar}
-            src="https://avatars.githubusercontent.com/u/39599492?v=4"
-          />
+          <Avatar src="https://avatars.githubusercontent.com/u/39599492?v=4" />
           <div className={styles.authorInfo}>
             <strong>Stefany Sá</strong>
             <span>UI Developer</span>
           </div>
         </div>
-
         <time title="4 de Dezembro às 17:32h" dateTime="2023-12-04 17:32:44">
           Publicado há 1h
         </time>
