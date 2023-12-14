@@ -1,5 +1,6 @@
 import { ThumbsUp, Trash } from "@phosphor-icons/react"
 import PropTypes from "prop-types"
+import { useState } from "react"
 import { Avatar } from "./Avatar"
 import styles from "./Comment.module.css"
 
@@ -11,7 +12,7 @@ Comment.propTypes = {
 /* 
 TODO:
 [x] clique na lixeira e exclusao
-[] clique no curtir e contador
+[x] clique no curtir e contador
 [] tempo do comentario 
 [] trazer dados da pessoa que comentou
 [] html para quando tiver sem comentarios
@@ -19,8 +20,16 @@ TODO:
 */
 
 export function Comment({ content, onDeleteComment }) {
+  const [likeCount, setLikeCount] = useState(0)
+
   function handleDeleteComment() {
     onDeleteComment(content)
+  }
+
+  function handleLikeComment() {
+    setLikeCount((stateOfLikes) => {
+      return stateOfLikes + 1
+    })
   }
 
   return (
@@ -48,9 +57,9 @@ export function Comment({ content, onDeleteComment }) {
           <p>{content}</p>
         </div>
         <footer>
-          <button>
+          <button onClick={handleLikeComment}>
             <ThumbsUp size={20} />
-            Aplaudir <span>20</span>
+            Aplaudir <span>{likeCount}</span>
           </button>
         </footer>
       </div>
