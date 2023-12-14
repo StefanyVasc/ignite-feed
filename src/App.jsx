@@ -49,7 +49,6 @@ function App() {
   return (
     <div>
       <Header />
-
       <div className={styles.wrapper}>
         <Sidebar />
         <main>

@@ -4,18 +4,25 @@ import { Avatar } from "./Avatar"
 import styles from "./Comment.module.css"
 
 Comment.propTypes = {
-  content: PropTypes.string,
+  content: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
+  onDeleteComment: PropTypes.func,
 }
 
-/* TODO:
-[] clique na lixeira e exclusao
+/* 
+TODO:
+[x] clique na lixeira e exclusao
 [] clique no curtir e contador
 [] tempo do comentario 
 [] trazer dados da pessoa que comentou
+[] html para quando tiver sem comentarios
 
 */
 
-export function Comment({ content }) {
+export function Comment({ content, onDeleteComment }) {
+  function handleDeleteComment() {
+    onDeleteComment(content)
+  }
+
   return (
     <div className={styles.comment}>
       <Avatar
@@ -34,7 +41,7 @@ export function Comment({ content }) {
                 Cerca de 1h atrás
               </time>
             </div>
-            <button title="Deletar comentário">
+            <button onClick={handleDeleteComment} title="Deletar comentário">
               <Trash size={24} />
             </button>
           </header>
