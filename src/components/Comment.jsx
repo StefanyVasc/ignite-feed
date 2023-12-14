@@ -1,8 +1,21 @@
 import { ThumbsUp, Trash } from "@phosphor-icons/react"
+import PropTypes from "prop-types"
 import { Avatar } from "./Avatar"
 import styles from "./Comment.module.css"
 
-export function Comment() {
+Comment.propTypes = {
+  content: PropTypes.string,
+}
+
+/* TODO:
+[] clique na lixeira e exclusao
+[] clique no curtir e contador
+[] tempo do comentario 
+[] trazer dados da pessoa que comentou
+
+*/
+
+export function Comment({ content }) {
   return (
     <div className={styles.comment}>
       <Avatar
@@ -25,7 +38,7 @@ export function Comment() {
               <Trash size={24} />
             </button>
           </header>
-          <p>Muito bom Devon, parabéns!! 👏👏</p>
+          <p>{content}</p>
         </div>
         <footer>
           <button>

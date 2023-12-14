@@ -18,12 +18,18 @@
   margin-top: 1rem;
 }
 
+.link {
+  fill: var(--gray-400);
+  margin-right: 5px;
+}
+
 .content a {
   font-weight: bold;
   color: var(--green-500);
 }
 
 .content a:hover {
+  cursor: pointer;
   color: var(--green-300);
 }
 

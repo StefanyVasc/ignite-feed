@@ -1,52 +1,113 @@
+import { format, formatDistanceToNow } from "date-fns"
+import ptBR from "date-fns/locale/pt-BR"
+import PropTypes from "prop-types"
 import { Avatar } from "./Avatar"
 import { Comment } from "./Comment"
+
+import { Link } from "@phosphor-icons/react"
+
+import { useState } from "react"
 import styles from "./Post.module.css"
 
-export function Post() {
+Post.propTypes = {
+  author: PropTypes.objectOf(PropTypes.string),
+  name: PropTypes.string,
+  role: PropTypes.string,
+  content: PropTypes.arrayOf(PropTypes.object),
+  publishedAt: PropTypes.objectOf(PropTypes.object),
+  tags: PropTypes.arrayOf(PropTypes.string),
+}
+
+export function Post({ author, publishedAt, content, tags }) {
+  const [comments, setComments] = useState(["Post arretado"])
+  const [newCommentText, setNewCommentText] = useState("")
+
+  const publishedAtDateFormatted = format(
+    publishedAt,
+    "d 'de' LLLL 'às' HH:mm'h'",
+    { locale: ptBR }
+  )
+
+  const publishedDateRelativeToNow = formatDistanceToNow(publishedAt, {
+    locale: ptBR,
+    addSuffix: true,
+  })
+
+  function handleCreateNewComment(event) {
+    event.preventDefault()
+
+    try {
+      newCommentText !== "" && setComments([...comments, newCommentText])
+    } catch (error) {
+      throw new Error(error.message)
+    } finally {
+      setNewCommentText("")
+    }
+  }
+
+  function handleNewCommentChange(event) {
+    try {
+      setNewCommentText(event.target.value.trim())
+    } catch (error) {
+      throw new Error(error.message)
+    }
+  }
+
   return (
     <article className={styles.post}>
       <header>
         <div className={styles.author}>
-          <Avatar src="https://avatars.githubusercontent.com/u/39599492?v=4" />
+          <Avatar src={author.avatarUrl} />
           <div className={styles.authorInfo}>
-            <strong>Stefany Sá</strong>
-            <span>UI Developer</span>
+            <strong>{author.name}</strong>
+            <span>{author.role}</span>
           </div>
         </div>
-        <time title="4 de Dezembro às 17:32h" dateTime="2023-12-04 17:32:44">
-          Publicado há 1h
+        <time
+          title={publishedAtDateFormatted}
+          dateTime={publishedAt.toISOString()}
+        >
+          {publishedDateRelativeToNow}
         </time>
       </header>
 
       <div className={styles.content}>
-        <p>Fala galeraa 👋</p>
-        <p>
-          Acabei de subir mais um projeto no meu portifa. É um projeto que fiz
-          no NLW Return, evento da Rocketseat. O nome do projeto é DoctorCare 🚀
-        </p>
-        <p>
-          👉 <a href="#"> jane.design/doctorcare</a>
-        </p>
+        {content.map((line) => {
+          if (line.type === "link") {
+            return (
+              <p key={line.content}>
+                <Link className={styles.link} size={16} />
+                <a href={line?.url}>{line.content}</a>
+              </p>
+            )
+          }
+
+          return <p key={line.content}>{line.content}</p>
+        })}
 
         <p className={styles.tags}>
-          <a href="#">#novoprojeto</a>
-          <a href="#">#nlw</a>
-          <a href="#">#rocketseat</a>{" "}
+          {tags?.map((tag) => (
+            <a key={tag} href="#">{`#${tag}`}</a>
+          ))}
         </p>
       </div>
 
-      <form className={styles.commentForm}>
+      <form onSubmit={handleCreateNewComment} className={styles.commentForm}>
         <strong>Deixe seu feedback</strong>
-        <textarea placeholder="Deixe um comentário" />
+        <textarea
+          onChange={handleNewCommentChange}
+          placeholder="Deixe um comentário"
+          value={newCommentText}
+        />
         <footer>
           <button type="submit">Publicar</button>
         </footer>
       </form>
 
       <div className={styles.commentList}>
-        <Comment />
-        <Comment />
-        <Comment />
+        {comments.map((comment, index) => {
+          return <Comment key={index} content={comment} />
+        })}
       </div>
     </article>
   )
